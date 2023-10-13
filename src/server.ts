@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 import express from 'express';
 import mongoose from 'mongoose';
 
@@ -12,8 +16,15 @@ import auth from './middleware/auth';
 
 
 
-mongoose.connect('mongodb://localhost:27017/myapp', {
+// mongoose.connect('mongodb://localhost:27017/myapp', {
+// });
+
+
+mongoose.connect(process.env.MONGODB_ATLAS_CONNECTION_STRING!, {
 });
+
+
+
 
 
 
@@ -48,7 +59,8 @@ app.post('/login', async (req, res) => {
     if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
       throw new Error();
     }
-    const token = jwt.sign({ _id: user._id.toString() }, 'mysecret');
+    // const token = jwt.sign({ _id: user._id.toString() }, 'mysecret');
+    const token = jwt.sign({ _id: user!._id.toString() }, process.env.JWT_SECRET!);
     res.send({ user, token });
   } catch (error) {
     res.status(400).send();
