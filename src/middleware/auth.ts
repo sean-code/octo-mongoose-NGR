@@ -10,8 +10,8 @@ const auth = async (req: Request & { user?: any }, res: Response, next: NextFunc
     if (!token) {
       throw new Error('Token not provided');
     }
-    // const decoded: any = jwt.verify(token, 'mysecret');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    const decoded: any = jwt.verify(token, 'mysecret');
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     const user = await User.findOne({ _id: decoded._id });
     if (!user) {
       throw new Error();
